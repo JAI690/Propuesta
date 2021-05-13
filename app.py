@@ -9,7 +9,7 @@ from dash.dependencies import Input, Output# Load Data
 external_stylesheets = ['https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-
+server = app.server
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options
 df = pd.read_csv('Censo2020/Viviendas19.CSV')
