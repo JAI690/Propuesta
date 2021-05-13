@@ -1,5 +1,5 @@
 import plotly.express as px
-import dash 
+import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
@@ -361,5 +361,5 @@ def update_output_div(input_value,mun_value,edad_value,sexo_value,cuartos_value,
     num3 = (num+num2)/2
     num4 = ((num3*0.3)*12)*10
     return  round(num4,2)
-
-app.run_server(debug=True)
+if __name__ == '__main__':
+    app.run_server(debug=True)
