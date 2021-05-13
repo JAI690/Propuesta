@@ -363,4 +363,4 @@ def update_output_div(input_value,mun_value,edad_value,sexo_value,cuartos_value,
     return  round(num4,2)
 
 if __name__ == "__main__":
-    app.run_server()
+    app.run_server(debug=True)
