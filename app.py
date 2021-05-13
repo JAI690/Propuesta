@@ -316,29 +316,6 @@ app.layout = html.Div(children=[
 
 @app.callback(
     Output(component_id='my-output', component_property='children'),
-    Input(component_id='my-input', component_property='value'),
-    Input(component_id='mun', component_property='value'),
-    Input(component_id='edad', component_property='value'),
-    Input(component_id='sexo', component_property='value'),
-    Input(component_id='cuartos', component_property='value'),
-    Input(component_id='hogar', component_property='value')
-)
-def update_output_div(input_value,mun_value,edad_value,sexo_value,cuartos_value,hogar_value):
-    filtro = df[df.CLAVIVP == int(input_value)]
-    if (mun_value != '' and mun_value != None): filtro = filtro[filtro.MUN==int(mun_value)]
-    if (edad_value != '' and edad_value != None): filtro = filtro[filtro.JEFE_EDAD.isin([edad_value-2, edad_value+2])]
-    if (sexo_value != '' and sexo_value != None): filtro = filtro[filtro.JEFE_SEXO==sexo_value]
-    if (cuartos_value != '' and cuartos_value != None): filtro = filtro[filtro.CUADORM==cuartos_value]
-    if (hogar_value != '' and hogar_value != None): filtro = filtro[filtro.TIPOHOG==int(hogar_value)]
-
-    num = filtro['INGTRHOG'].median()
-    num2 = filtro['INGTRHOG'].mean()
-
-    num3 = (num+num2)/2
-    num4 = ((num3*0.3)*12)*10
-    return  round(num3,2)
-
-@app.callback(
     Output(component_id='my-output2', component_property='children'),
     Input(component_id='my-input', component_property='value'),
     Input(component_id='mun', component_property='value'),
@@ -360,7 +337,7 @@ def update_output_div(input_value,mun_value,edad_value,sexo_value,cuartos_value,
 
     num3 = (num+num2)/2
     num4 = ((num3*0.3)*12)*10
-    return  round(num4,2)
+    return  round(num3,2),round(num4,2)
 
 if __name__ == "__main__":
     app.run_server(debug=True)
