@@ -3,3 +3,4 @@ plotly
 pandas
 dash
 plotly.express
+dash-bootstrap-components
