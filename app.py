@@ -266,9 +266,12 @@ def algoritmo(baño,metro):
             posicion=0
 
             for i in range(0,len(baño)):
-                    if (dato[i]<menor):
-                        menor=dato[i]
-                        posicion=i+1
+                    if(min(dato)>300000):
+                        posicion=max(baño)
+                    else:
+                        if(dato[i]<menor):
+                            menor=dato[i]
+                            posicion=i+1
             dato = []
             if(metro[posicion]<60):
                 posicion = posicion - 1
@@ -279,30 +282,33 @@ def algoritmo(baño,metro):
         else:
             aviso = "Te sugerimos considerar menos habitaciones."
 
-def ope (cuarto_value,venta,porc):
+def ope (cuarto_value,venta,porc,categoria):
         opcionesbaños=[]
-        opcionesmts=[]
+        opcionesmts=[0]
         preciobase = intercept + (cuarto_value*bed)
-        for i in range(1,cuarto_value+1):
-            preciorestante = venta - (preciobase*porc)
-            if(preciorestante<=0):
+        while(max(opcionesmts)<=0):
+                opcionesmts=[]
                 categoria = categoria - 1
                 porc = PORCENTAJES[categoria]
-            baños = i
-            bañosprecio = (baños*bath*porc)
+                preciorestante = venta - (preciobase*porc)
+                for i in range(1,cuarto_value+1):
+                    preciorestante = venta - (preciobase*porc)
+                    baños = i
+                    bañosprecio = (baños*bath*porc)
+                    precioconbaño = preciorestante - bañosprecio
+                    bañomedio = i+0.5
+                    bañosmedioprecio = (bañomedio*bath*porc)
+                    precioconbañomedio = preciorestante - bañosmedioprecio
+                    metros = round(precioconbaño/(mtsprecio*porc),2)
+                    metrosmedio = round(precioconbañomedio/(mtsprecio*porc),2)
+                    opcionesbaños.append(baños)
+                    opcionesmts.append(metros)
+                    opcionesbaños.append(bañomedio)
+                    opcionesmts.append(metrosmedio)
+        return (opcionesbaños, opcionesmts,preciorestante)
 
-            precioconbaño = preciorestante - bañosprecio
-            bañomedio = i+0.5
-            bañosmedioprecio = (bañomedio*bath*porc)
-            precioconbañomedio = preciorestante - bañosmedioprecio
-            metros = round(precioconbaño/(mtsprecio*porc),2)
-            metrosmedio = round(precioconbañomedio/(mtsprecio*porc),2)
-            opcionesbaños.append(baños)
-            opcionesmts.append(metros)
-            opcionesbaños.append(bañomedio)
-            opcionesmts.append(metrosmedio)
-        return (opcionesbaños, opcionesmts)
 
+#LAYOUT ---------------------------------------------------------------------------------------------------
 app.layout = html.Div(children=[
 
     html.Div(children=[
@@ -396,64 +402,79 @@ app.layout = html.Div(children=[
 
                 #Segunda fila -----------------------------------------------------
                      dbc.Row([
+                        dbc.Col(
+                            html.Div(
                         dbc.CardDeck([
                             dbc.Card(
                                 dbc.CardBody(
                                     [
-                                        dbc.CardImg(src="baños.png", top=True),
-                                        dbc.CardBody([
-                                                        html.H3(["BAÑOS: ",html.Div(id="baños")],className="card-text"),
-                                        ])
-                                    ]
-                                )
-                            ),
-
-                            dbc.Card(
-                                dbc.CardBody(
-                                    [
-
-                                        dbc.CardBody(html.H3(["METROS: ",html.Div(id="metraje")],className="card-text")),
-
-                                        dbc.CardImg(src="real-estate.png", bottom=True),
-
-                                    ]
-                                )
-                            ),
-                            dbc.Card(
-                                dbc.CardBody(
-                                    [
-                                        dbc.CardImg(src="baños.png", top=True),
-                                        dbc.CardBody([
-                                                        html.H3(["HABITACIONES: ",html.Div(id="cuarto")],className="card-text"),
-                                        ])
-                                    ]
-                                )
-                            ),
-                        ])
-
-                ],className="mt-4"),
-
-
-                #Tercer fila -----------------------------------------------------
-                     dbc.Row([
-                         dbc.Col(
-                        dbc.CardDeck([
-                            dbc.Card(
-                                dbc.CardBody(
-                                    [
-                                        html.H5("Precio", className="card-title"),
+                                        html.H5("Distribución del ingreso.", className="card-title"),
                                         dcc.Graph(id="graph"),
                                     ]
                                 )
-                            )])
-                         ,width=12)
-                ],className="mt-4"),
-                ])
+                            )]),className="auto-mx")
+                         ,width=7),
+                        dbc.Col([
+                         html.Div([
+                            dbc.CardDeck([
+                                dbc.Card(
+                                    dbc.CardBody(
+                                        [
+                                            dbc.CardImg(src="assets/baños.png", top=True),
+                                            dbc.CardBody([
+                                                            html.P(children=["BAÑOS: ",html.B(id="baños")],className="card-text"),
+                                            ])
+                                        ]
+                                    )
+                                ),
 
-                  ],width=8,className="mx-auto"
-            )
-    ],className="mt-5")
-    ], className="mx-auto"),
+                                dbc.Card(
+                                    dbc.CardBody(
+                                        [
+                                            dbc.CardImg(src="assets/metraje.png", top=True),
+                                            dbc.CardBody(html.P(["METROS: ",html.B(id="metraje")],className="card-text")),
+
+
+
+                                        ]
+                                    )
+                                )])],className="auto-mx"),
+                            html.Div([
+                             dbc.CardDeck([
+                                dbc.Card(
+                                    dbc.CardBody(
+                                        [
+                                            dbc.CardImg(src="/assets/Picture1.png"),
+                                            dbc.CardBody([
+                                                            html.P(["HABITACIONES: ",html.B(id="cuarto")],className="card-text"),
+                                            ]),
+
+                                        ]
+                                    )
+                                ),
+                                 dbc.Card(
+                                    dbc.CardBody(
+                                        [
+                                            dbc.CardImg(src="/assets/aviso2.png", top=True),
+                                            dbc.CardBody([
+                                                            html.P(["AVISO: ",html.B(id="aviso")],className="card-text"),
+                                            ]),
+
+                                        ]
+                                    )
+                                )
+                            ])
+                            ],className="mt-3")
+                        ],width=5),
+
+                ],className="mt-4"),
+
+
+
+
+    ]),
+],className="mx-auto")
+        ])])
 ])
 
 
@@ -465,6 +486,7 @@ app.layout = html.Div(children=[
     Output(component_id='baños', component_property='children'),
     Output(component_id='metraje', component_property='children'),
     Output(component_id='cuarto', component_property='children'),
+    Output(component_id='aviso', component_property='children'),
     Input(component_id='my-input', component_property='value'),
     Input(component_id='mun', component_property='value'),
     Input(component_id='edad', component_property='value'),
@@ -536,20 +558,32 @@ def update_output_div(input_value,mun_value,edad_value,sexo_value,cuartos_value,
             cuartos = cuartos_prospectados
 
         mtsesperados = int(cuartos) * 100
-        opciones = ope(int(cuartos),venta,porc)
+        opciones = ope(int(cuartos),venta,porc,categoria)
 
 
         baños = opciones[0]
         metraje = opciones[1]
-
+        restante = opciones[2]
         pera= algoritmo(baños,metraje)
 
         if(max(metraje)<=0):
             bañosOP=0
             metrajeOP=0
         else:
-            bañosOP = pera[0]
-            metrajeOP = pera[1]
+            if(pera[1]>400):
+                if(cuartos==1):
+                    metrajeOP = 150
+                elif(cuartos==2):
+                    metrajeOP = 200
+                elif(cuartos==3):
+                    metrajeOP = 250
+                else:
+                    metrajeOP = 300
+                bañosOP = pera[0]
+                aviso = "Casa díficil de clasificar"
+            else:
+                bañosOP = pera[0]
+                metrajeOP = pera[1]
 
 
         if(metrajeOP > mtsesperados*1.5):
@@ -558,10 +592,24 @@ def update_output_div(input_value,mun_value,edad_value,sexo_value,cuartos_value,
             aviso = "Parece que todo va bien."
 
 
-        fig = px.histogram(graf, nbins=50, range_x=[0,200000])
+        fig = px.histogram(graf, nbins=50, range_x=[0,200000],color_discrete_sequence=["#e5b0ea"],
+                           )
+
+        fig.update_layout(xaxis_title_text='Ingreso', # xaxis label
+                           yaxis_title_text='Personas',
+                               font=dict(
+                                        family="Courier New, monospace",
+                                        size=18,
+                                        color="White"
+                                    ),
+                           showlegend=False,
+
+                           paper_bgcolor='rgba(0,0,0,0)',
+                           plot_bgcolor='rgba(0,0,0,0)')
 
 
-        return  '{:20,.2f}'.format(ingreso),'{:20,.2f}'.format(venta),fig,bañosOP,metrajeOP,cuartos
+        return  '{:20,.2f}'.format(ingreso),'{:20,.2f}'.format(venta),fig,bañosOP,metrajeOP,cuartos,aviso
+
 
 
 if __name__ == "__main__":
