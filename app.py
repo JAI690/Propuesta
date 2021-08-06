@@ -305,7 +305,7 @@ def ope (cuarto_value,venta,porc,categoria):
                     opcionesmts.append(metros)
                     opcionesbaños.append(bañomedio)
                     opcionesmts.append(metrosmedio)
-        return (opcionesbaños, opcionesmts,preciorestante)
+        return (opcionesbaños, opcionesmts, preciorestante)
 
 
 #LAYOUT ---------------------------------------------------------------------------------------------------
